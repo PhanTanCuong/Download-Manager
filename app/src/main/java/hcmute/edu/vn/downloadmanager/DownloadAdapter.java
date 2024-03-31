@@ -18,10 +18,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
+
 public class DownloadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     Context context;
     List<DownloadModel> downloadModels=new ArrayList<>();
+
 
     //Constructor of DownloadAdapter==> set the Value of Context and Add Store Value in downloadModel List
     public DownloadAdapter(Context context,List<DownloadModel> downloadModels){
@@ -29,7 +32,10 @@ public class DownloadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         this.downloadModels=downloadModels;
     }
 
-//    Creating DownloadViewHolder Class Which Extend RecyclerView.ViewHolder
+
+
+
+    //    Creating DownloadViewHolder Class Which Extend RecyclerView.ViewHolder
 //    This Class Hold the Field of Layout (Row Data)
     public class DownloadViewHolder extends RecyclerView.ViewHolder{
         TextView file_title;
@@ -164,5 +170,43 @@ public class DownloadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public int getItemCount() {
         return downloadModels.size();
+    }
+
+    public void changeItem(long downloadid) {
+        int i=0;
+        for(DownloadModel downloadModel:downloadModels){
+            if(downloadid==downloadModel.getDownloadId()){
+                notifyItemChanged(i);
+            }
+            i++;
+        }
+    }
+
+    public boolean ChangeItemWithStatus(final String message, long downloadid) {
+        boolean comp=false;
+        int i=0;
+        for(final DownloadModel downloadModel:downloadModels){
+            if(downloadid==downloadModel.getDownloadId()){
+                downloadModels.get(i).setStatus(message);
+                notifyItemChanged(i);
+                comp=true;
+            }
+            i++;
+        }
+        return comp;
+    }
+
+    public void setChangeItemFilePath( String path, long id) {
+
+        int i=0;
+        for(final DownloadModel downloadModel:downloadModels){
+            if(id==downloadModel.getDownloadId()){
+                downloadModels.get(i).setFile_path(path);
+                notifyItemChanged(i);
+
+            }
+            i++;
+        }
+
     }
 }
